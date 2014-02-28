@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" /> 
+        <title>Post One</title>
+        <style>
+            body{
+				width: 100%;
+				background:#FCFCFC;
+				font-family: 'Roboto', sans-serif;
+				font-size:12px;
+				text-align: left;
+				background: url(http://xlolo.u.qiniudn.com/bgnoise_lg.png) repeat left top;
+			}
+			input,button,select,textarea{
+				outline:none;
+			}
+			.container{
+				margin: 0 auto;
+				min-width: 320px;
+				width: 38%;
+				height: 100%;
+			}
+			.header{
+				text-align:right;
+				padding: 16px;
+				color: #FFF;
+				font-size: 40px;
+				background-color: #ca2f33;
+				max-height: 100px;
+				border-bottom: 8px solid #fbfbfb;
+			}
+
+			.content{
+				color: #999;
+				background-color: #FFF;
+				padding: 32px;
+				font-size:16px;
+			}
+
+			.btn-post {
+				text-align: center;
+				margin-top: 24px;
+				font-size:16px;
+			}
+			.btn-post a{
+				padding:8px 20px 8px 20px;
+				text-decoration: none;
+				color: #FFF;
+				background-color: #cf2f33;
+			}
+
+			.btn-post a:hover {
+				text-decoration: none;
+				color: #FFF;
+				background-color: #FF6666;
+			}
+
+			.footer {
+				background-color: #F7F8F9;
+				text-align: center;
+				padding:8px;
+				color: #AAA;
+			}
+
+			.footer a {
+				text-decoration: none;
+				color: #AAF;
+			}
+
+        </style>
+    </head>
+    <body>
+	    <div class="container">
+	        <div class="header">
+	        	<span>每日一博</span>
+	        </div>
+
+
+	        <div class="content">
+
+				<div>
+					<span>Title</span>
+					<input id="input-title" style="width:100%;font-size:16px;border:2px #DDD solid;padding:4px;color:#555" />
+				</div>
+
+				<div style="margin-top:16px;">
+					<span>Url</span>
+					<input id="input-url" style="width:100%;font-size:16px;border:2px #DDD solid;padding:4px;color:#555" />
+				</div>
+	        
+				<div style="margin-top:16px">
+					<span>Summary</span>
+	        		<TEXTAREA  id="input-summary" style="display:block;width:100%;height:200px;font-size:16px;border:2px #DDD solid;padding:4px;color:#555"></TEXTAREA>
+				</div>
+				<div class="btn-post">
+					<a href="#" id="btn-post-one">Post</a>
+				</div>
+				
+	       </div>
+
+	       <div class="footer"><span>Power by </span> <a href="https://clientarea.ramnode.com/aff.php?aff=1212">RamNode</a></div>
+	    </div>
+
+
+
+        <script src="http://cdn.staticfile.org/jquery/1.11.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			
+
+			$("#btn-post-one").click(
+				function()
+				{
+
+					$.ajax({
+			            url: "/post",
+			            type: "POST",
+			            data: { title: $("#input-title").val(), url: $("#input-url").val(), summary: $("#input-summary").val()},
+			            success: function(event) {
+			                alert("提交成功");
+			                $("#input-title").value='';
+			                $("#input-url").value='';
+			                $("#input-summary").value='';
+			            },
+			            error: function() {
+			                alert("提交失败");
+			            }
+			        });
+					
+				}
+				);
+
+		</script>
+    </body>
+</html>

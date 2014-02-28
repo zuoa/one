@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" /> 
+        <meta NAME="Title" CONTENT="每日一博">
+        <META NAME="Keywords" CONTENT="每日一博,精彩博客,博客精华,优秀博客">
+        <title>One - 每日博客精选</title>
+        <style>
+            body{
+				width: 100%;
+				background:#FCFCFC;
+				font-family: 'Roboto', sans-serif;
+				font-size:12px;
+				text-align: left;
+				background: url(http://xlolo.u.qiniudn.com/bgnoise_lg.png) repeat left top;
+			}
+			.container{
+				margin: 0 auto;
+				min-width: 320px;
+				width: 38%;
+				height: 100%;
+			}
+			.header{
+				text-align:right;
+				padding: 16px;
+				color: #FFF;
+				font-size: 40px;
+				background-color: #ca2f33;
+				max-height: 100px;
+				border-bottom: 8px solid #fbfbfb;
+			}
+
+			.content{
+				color: #999;
+				background-color: #FFF;
+				padding: 16px;
+			}
+
+			.footer {
+				background-color: #F7F8F9;
+				text-align: center;
+				padding:8px;
+				color: #AAA;
+			}
+
+			.footer a {
+				text-decoration: none;
+				color: #AAF;
+			}
+
+
+			.content-item{
+				padding-bottom:8px;
+				margin-bottom: 8px;
+				border-bottom:1px solid #F6F6F6;
+			}
+			.content-item a {
+				padding: 2px 1px 2px 0;
+				color: #DD5353;
+				border-bottom: 1px dashed #FF7169;
+				font-weight: bold;
+				text-decoration: none;
+			}
+
+			.content-item a:hover {
+				color:#432f21;
+				border-bottom: 1px dashed #432f21;
+			}
+
+			.content-item-link{
+				margin-bottom: 4px;
+			}
+        </style>
+    </head>
+    <body>
+	    <div class="container">
+	        <div class="header">
+	        	<span>每日一博</span>
+	        </div>
+
+	        <div class="content">
+
+	        	{% for article in articles %}
+		         	<div class="content-item">
+		        		<div class="content-item-link">
+		        			<a href="{{ escape(article.get('url')) }}" target="blank"> {{ escape(article.get('title')) }}</a>
+						</div>
+			       		<span style="display:inline-block;padding-top:4px"> {{ escape(article.get('summary')) }}</span>
+		        	</div>
+	       	 	{% end %}
+	       </div>
+
+	       <div class="footer"> <span>{{ escape(update_time) }}</span>  <span>| Power by </span> <a href="https://clientarea.ramnode.com/aff.php?aff=1212">RamNode</a></div>
+	    </div>
+    </body>
+</html>
