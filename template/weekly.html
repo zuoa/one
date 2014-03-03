@@ -101,7 +101,7 @@
 	        	{% for article in articles %}
 		         	<div class="content-item">
 		        		<div class="content-item-link">
-		        			<a href="{{ escape(article.get('url')) }}" target="blank"> {{ escape(article.get('title')) }}</a>
+		        			<a href="/go/{{ escape(article.get('id')) }}" target="blank"> {{ escape(article.get('title')) }}</a>
                             <span class="span-click">{{ article.get('clicks') }}</span>
 						</div>
 			       		<span style="display:inline-block;padding-top:4px"> {{ escape(article.get('summary')) }}</span>
