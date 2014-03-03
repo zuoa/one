@@ -18,6 +18,7 @@ class Application(web.Application):
 
         handlers = [
             (r"/post", PostHandler),
+            (r"/go/([0-9]+)", JumpHandler),
             (r"/([0-9]*)", PageHandler),
         ]
 
@@ -55,13 +56,30 @@ class PageHandler(web.RequestHandler):
         articles = self.db.query('SELECT * FROM one_article_a_day ORDER BY id DESC LIMIT %s, 50;', int(page) * 50)
 
         update_time = ""
-        with open("/tmp/one.update.time", "r") as update_file:
-            update_time = update_file.readline()
-            update_file.close()
+        try:
+            with open("/tmp/one.update.time", "r") as update_file:
+                update_time = update_file.readline()
+                update_file.close()
+        except:
+            pass
             
         self.render("weekly.html", articles=articles, update_time=update_time)
 
+class JumpHandler(web.RequestHandler):
+    def __init__(self, application, request, **kwargs):
+        self.db = torndb.Connection(DB_IP, DB_NAME, DB_USER, DB_PASSWD)
+        super(JumpHandler, self).__init__(application, request, **kwargs)
 
+    def __del__(self):
+        self.db.close()
+
+    def get(self, pid):
+        articles = self.db.query('SELECT * FROM one_article_a_day WHERE id=%s;', pid)
+        if (not articles) or (0 == len(articles)):
+            self.redirect("/")
+            return
+        self.db.execute("UPDATE one_article_a_day SET clicks=clicks+1 WHERE id=%s;", pid)
+        self.redirect(articles[0].get('url'))
 
 if __name__ == "__main__":
     http_server = httpserver.HTTPServer(Application())

@@ -43,15 +43,26 @@ for i in reversed(range(0, feeds.length)):
     if feed.title.find(KEY_WORD) >= 0:
         feed.title = feed.title.replace(KEY_WORD, '')
         articles.append((feed.title, feed.link, strip_tags(feed.summary)))
-print 'articles size:', len(articles)
+print 'oschine articles size:', len(articles)
+
+#cnblog
+feeds = RssFeed('http://feed.cnblogs.com/blog/picked/rss')
+for i in reversed(range(0, feeds.length)):
+    feed = feeds.entries[i]
+    articles.append((feed.title, feed.link, strip_tags(feed.summary)))
+
+print 'oschine articles size:', feeds.length
+
 db.executemany('INSERT INTO one_article_a_day (title, url, summary) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE title=VALUES(title),summary=VALUES(summary);', articles)
 print 'update db end'
 
 
 
-with open("/tmp/one.update.time", "w") as update_file:
-    update_time = datetime.now().strftime("%c")
-    print "update time :", update_time
-    update_file.write(update_time)
-    update_file.close()
-
+try:
+    with open("/tmp/one.update.time", "w") as update_file:
+        update_time = datetime.now().strftime("%c")
+        print "update time :", update_time
+        update_file.write(update_time)
+        update_file.close()
+except:
+    pass

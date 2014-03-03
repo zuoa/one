@@ -71,7 +71,24 @@
 			.content-item-link{
 				margin-bottom: 4px;
 			}
+
+            .span-click {
+                padding:4px;
+                margin-left:8px;
+                color:#FFF;
+            }
+
+			::-moz-selection{ /*针对Firefox*/
+				background:#FF7979;     
+				color:#fff;     
+			}     
+			::selection {     
+				background:#FF7979;     
+				color:#fff;     
+			} 
         </style>
+
+
     </head>
     <body>
 	    <div class="container">
@@ -85,6 +102,7 @@
 		         	<div class="content-item">
 		        		<div class="content-item-link">
 		        			<a href="{{ escape(article.get('url')) }}" target="blank"> {{ escape(article.get('title')) }}</a>
+                            <span class="span-click">{{ article.get('clicks') }}</span>
 						</div>
 			       		<span style="display:inline-block;padding-top:4px"> {{ escape(article.get('summary')) }}</span>
 		        	</div>
@@ -93,5 +111,10 @@
 
 	       <div class="footer"> <span>{{ escape(update_time) }}</span>  <span>| Power by </span> <a href="https://clientarea.ramnode.com/aff.php?aff=1212">RamNode</a></div>
 	    </div>
+
+	<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3c067f5807d78524433bddc610d67097' type='text/javascript'%3E%3C/script%3E"));
+	</script>
     </body>
 </html>
