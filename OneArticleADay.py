@@ -2,6 +2,7 @@
 import feedparser
 import torndb
 from datetime import datetime
+from time import mktime
 
 def strip_tags(html):
     """
@@ -18,7 +19,11 @@ def strip_tags(html):
     parser.handle_data = result.append
     parser.feed(html)
     parser.close()
-    return ''.join(result)
+
+    r = ''.join(result)
+    if len(r) >= 2048:
+        r = r[:2048]
+    return r
 
 
 KEY_WORD = u'【每日一博】'
@@ -32,28 +37,27 @@ class RssFeed(object):
         self.keys = d.entries[0].keys()
 
 
+
+db = torndb.Connection('127.0.0.1', 'yu', 'root', 'passwd')
+
+feed_urls = ['http://coolshell.cn/feed', 'http://www.oschina.net/news/rss', 'http://feed.cnblogs.com/blog/picked/rss']
 articles = []
-feeds = RssFeed('http://www.oschina.net/news/rss')
 
+for url in feed_urls:
+    feeds = RssFeed(url)
+    for i in range(0, feeds.length):
+        feed = feeds.entries[i]
 
-db = torndb.Connection('127.0.0.1', 'yu', 'root', 'ljd563538')
-for i in reversed(range(0, feeds.length)):
-    feed = feeds.entries[i]
+        if 'oschina' in url and feed.title.find(KEY_WORD) < 0:
+            continue
 
-    if feed.title.find(KEY_WORD) >= 0:
-        feed.title = feed.title.replace(KEY_WORD, '')
-        articles.append((feed.title, feed.link, strip_tags(feed.summary)))
-print 'oschine articles size:', len(articles)
+        if feed.title.find(KEY_WORD) >= 0:
+            feed.title = feed.title.replace(KEY_WORD, '')
+        dt = datetime.fromtimestamp(mktime(feed.published_parsed))
+        articles.append((feed.title, feed.link, strip_tags(feed.summary), dt.strftime("%Y-%m-%d %H:%M:%S")))
+    print url, ' articles size:', feeds.length
 
-#cnblog
-feeds = RssFeed('http://feed.cnblogs.com/blog/picked/rss')
-for i in reversed(range(0, feeds.length)):
-    feed = feeds.entries[i]
-    articles.append((feed.title, feed.link, strip_tags(feed.summary)))
-
-print 'oschine articles size:', feeds.length
-
-db.executemany('INSERT INTO one_article_a_day (title, url, summary) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE title=VALUES(title),summary=VALUES(summary);', articles)
+db.executemany('INSERT INTO one_article_a_day (title, url, summary, publish_time) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE title=VALUES(title),summary=VALUES(summary),publish_time=VALUES(publish_time);', articles)
 print 'update db end'
 
 

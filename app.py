@@ -53,7 +53,7 @@ class PageHandler(web.RequestHandler):
     def get(self, page):
         if not page:
             page = 0
-        articles = self.db.query('SELECT * FROM one_article_a_day ORDER BY id DESC LIMIT %s, 50;', int(page) * 50)
+        articles = self.db.query('SELECT * FROM one_article_a_day ORDER BY publish_time DESC LIMIT %s, 50;', int(page) * 50)
 
         update_time = ""
         try:
